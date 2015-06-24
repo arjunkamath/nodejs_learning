@@ -1,5 +1,6 @@
 var fs = require('fs');
 var lineReader = require('line-by-line');
+var helper_functions = require('./helper_functions.js');
 
 var options = 
 { encoding: 'utf8',
@@ -7,7 +8,7 @@ var options =
 
 var read_lines = new lineReader('pipe_dreams.txt', options);
 var line_num = 0;
-var parsed = Create2DArray(8);
+var parsed = helper_functions.create2DArray(8);
 var line_1 = [0,0,0,0,0,0,0,0,0];
 var line_2 = [0,0,0,0,0,0,0,0,0];
 
@@ -57,25 +58,6 @@ function assign_result(result_array, index, val){
     }
 }
 
-function print_line_array(line_array){
-    console.log("Printing array");
-    for(var i=0; i<line_array.length; i++){
-        console.log(line_array[i]);
-    }
-}
-
-
-function Create2DArray(rows) {
-  var arr = [];
-
-  for (var i=0;i<rows;i++) {
-     arr[i] = [];
-  }
-
-  return arr;
-}
-
-
 read_lines
 .on('line', function(line){
     console.log('Line number: ' + line_num);
@@ -89,22 +71,14 @@ read_lines
 .on('end', function(){
     console.log("File read");
 
-    print_line_array(line_1);
-    print_line_array(line_2);
+    helper_functions.print_array(line_1);
+    helper_functions.print_array(line_2);
 
     parser(parsed, 0, line_1);
     parser(parsed, 4, line_2);
 
-    print_line_array(line_1);
-    print_line_array(line_2);
+    helper_functions.print_array(line_1);
+    helper_functions.print_array(line_2);
 
 })
 
-print_line_array(line_1);
-    print_line_array(line_2);
-
-    parser(parsed, 0, line_1);
-    parser(parsed, 4, line_2);
-
-    print_line_array(line_1);
-    print_line_array(line_2);
