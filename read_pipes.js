@@ -10,13 +10,18 @@ var NUM_OF_ENTRIES = 4;
 
 var read_lines = new lineReader('pipe_dreams.txt', options);
 var line_num = 0;
+var entry_num = 0;
+var entry_sum = [];
+var entry_checksum = [];
+var entry_validity = [];
 var parsed = helper_functions.create2DArray(4);
 var output_lines = helper_functions.create2DArray(NUM_OF_ENTRIES);
 //var line_2 = [0,0,0,0,0,0,0,0,0];
 
 function parser(array, result){
 
-    console.log('Parser called');
+    //console.log('Parser called');
+    console.log('\n');
 
     for(var row = 0; row < 4; row ++) {
         for(var col = 0; col < 27; col ++) {
@@ -75,20 +80,34 @@ read_lines
     line_num++;
 
     if(line_num % 4 == 0){
-        output_lines[Math.ceil(line_num/4)] = [0,0,0,0,0,0,0,0,0];
-        parser(parsed, output_lines[Math.ceil(line_num/4)]);
-        helper_functions.print_array(output_lines[Math.ceil(line_num/4)]);
+        entry_num = Math.ceil(line_num/4);
+        
+        output_lines[entry_num] = [0,0,0,0,0,0,0,0,0];
+        parser(parsed, output_lines[entry_num]);
+        helper_functions.print_array(output_lines[entry_num]);
+
+        entry_sum[entry_num] =  helper_functions.add_array(output_lines[entry_num]);
+        console.log("The sum is: " + entry_sum[entry_num]);
+
+        entry_checksum[entry_num] =  get_checksum(output_lines[entry_num]);
+        console.log("The checksum is: " + entry_checksum[entry_num]);
+
+        entry_validity[entry_num] = ((entry_checksum[entry_num]%11) == 0);
+        console.log("Entry Validity is: " + entry_validity[entry_num]);
+
     }
-
-
 
 })
 .on('end', function(){
     console.log("File read");
-
-    //helper_functions.print_array(output_lines[0]);
-    //helper_functions.print_array(output_lines[1]);
-    //helper_functions.print_array(output_lines[2]);
-
 })
+
+function get_checksum(array){
+  var checksum =0;
+  
+  for(var i=0; i < array.length; i++){
+    checksum += array[i]*(9-i);   
+  }  
+  return checksum;
+}
 
