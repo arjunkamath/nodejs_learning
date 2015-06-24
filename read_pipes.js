@@ -6,14 +6,19 @@ var options =
 { encoding: 'utf8',
   skipEmptyLines: false };
 
+var NUM_OF_ENTRIES = 4;
+
 var read_lines = new lineReader('pipe_dreams.txt', options);
 var line_num = 0;
-var parsed = helper_functions.create2DArray(8);
-var line_1 = [0,0,0,0,0,0,0,0,0];
-var line_2 = [0,0,0,0,0,0,0,0,0];
+var parsed = helper_functions.create2DArray(4);
+var output_lines = helper_functions.create2DArray(NUM_OF_ENTRIES);
+//var line_2 = [0,0,0,0,0,0,0,0,0];
 
-function parser(array, start_line, result){
-    for(var row = start_line; row < (start_line + 4); row ++) {
+function parser(array, result){
+
+    console.log('Parser called');
+
+    for(var row = 0; row < 4; row ++) {
         for(var col = 0; col < 27; col ++) {
             if( (row%4==0) && (col%3==1) && (array[row][col] == ' ')){
             //either 4 or 1
@@ -60,25 +65,30 @@ function assign_result(result_array, index, val){
 
 read_lines
 .on('line', function(line){
-    console.log('Line number: ' + line_num);
+    //console.log('Line number: ' + line_num);
 
     for (var j=0; j<27; j++){
-        console.log("char at " + line_num + "," + j + "is: " + line.charAt(j));
-        parsed[line_num][j] = line.charAt(j);
+        //console.log("char at " + line_num + "," + j + "is: " + line.charAt(j));
+        parsed[line_num % 4][j] = line.charAt(j);
     }
+
     line_num++;
+
+    if(line_num % 4 == 0){
+        output_lines[Math.ceil(line_num/4)] = [0,0,0,0,0,0,0,0,0];
+        parser(parsed, output_lines[Math.ceil(line_num/4)]);
+        helper_functions.print_array(output_lines[Math.ceil(line_num/4)]);
+    }
+
+
+
 })
 .on('end', function(){
     console.log("File read");
 
-    helper_functions.print_array(line_1);
-    helper_functions.print_array(line_2);
-
-    parser(parsed, 0, line_1);
-    parser(parsed, 4, line_2);
-
-    helper_functions.print_array(line_1);
-    helper_functions.print_array(line_2);
+    //helper_functions.print_array(output_lines[0]);
+    //helper_functions.print_array(output_lines[1]);
+    //helper_functions.print_array(output_lines[2]);
 
 })
 
