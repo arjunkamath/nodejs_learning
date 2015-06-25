@@ -34,7 +34,8 @@ function parser(array, result){
                     assign_result(result, Math.floor(col/3), 1); 
                 } 
             } else if( (row%4==2) && (col%3==2) && (array[row][col] == ' ')){
-		result[Math.floor(col/3)] = 2;  
+				assign_result(result, Math.floor(col/3), 2); 
+		        //result[Math.floor(col/3)] = 2;  
             } else if( (row%4==1) && (col%3==2) && (array[row][col] == ' ')){
             //either 5 or 6
                 if(array[row+1][col-2] == ' '){
@@ -44,12 +45,15 @@ function parser(array, result){
                     assign_result(result, Math.floor(col/3), 6); 
                 }
             } else if((row%4==1) && (col%3==0) && (array[row][col] == ' ')){
-             // either 3 or 7
-                if(array[row][col+1] == '_'){
-                    assign_result(result, Math.floor(col/3), 3); 
-                } else {
-                    assign_result(result, Math.floor(col/3), 7); 
-                }             
+                 //this first condition differentiates from 2
+			    if((array[row+1][col+2] == '|')){
+					// either 3 or 7
+                    if(array[row][col+1] == '_'){
+                        assign_result(result, Math.floor(col/3), 3); 
+                    } else {
+                        assign_result(result, Math.floor(col/3), 7); 
+                    }
+			    }				
             } else if((row%4==2) && (col%3==2) && (array[row][col] == '|')){
              // either 8 or 9
                 if(array[row][col-2] == ' '){
